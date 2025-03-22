@@ -8,12 +8,18 @@
     "db:seed": "knex seed:run",
     "db:seed:dev": "knex seed:run --env docker",
     "db:seed:prod": "knex seed:run --env production",
-    "db:rollback": "knex migrate:rollback"
+    "db:rollback": "knex migrate:rollback",
+    "format": "prettier --write .",
+    "localdev:start": "docker-compose up --build"
   },
   "dependencies": {
     "@hapi/hapi": "^21.4.0",
+    "dotenv": "^16.4.7",
     "knex": "^3.1.0",
     "nodemon": "^3.1.9",
     "pg": "^8.14.1"
+  },
+  "devDependencies": {
+    "prettier": "^3.5.3"
   }
 }

@@ -1,13 +1,13 @@
-import dotenv from "dotenv";
+import dotenv from 'dotenv';
 dotenv.config();
 
 const baseConfig = {
-  client: "postgresql",
+  client: 'postgresql',
   migrations: {
-    directory: "./db/migrations",
+    directory: './db/migrations',
   },
   seeds: {
-    directory: "./db/seeds",
+    directory: './db/seeds',
   },
   pool: {
     min: 2,
@@ -18,18 +18,18 @@ const baseConfig = {
 // Helper function to validate production config
 const validateProductionConfig = () => {
   const requiredEnvVars = [
-    "DB_HOST",
-    "DB_NAME",
-    "DB_USER",
-    "DB_PASSWORD",
-    "DB_PORT",
+    'DB_HOST',
+    'DB_NAME',
+    'DB_USER',
+    'DB_PASSWORD',
+    'DB_PORT',
   ];
   const missing = requiredEnvVars.filter((varName) => !process.env[varName]);
 
   if (missing.length > 0) {
-    console.error("Missing required environment variables:", missing);
+    console.error('Missing required environment variables:', missing);
     throw new Error(
-      `Missing required environment variables: ${missing.join(", ")}`,
+      `Missing required environment variables: ${missing.join(', ')}`,
     );
   }
 };
@@ -38,10 +38,10 @@ const knexConfig = {
   development: {
     ...baseConfig,
     connection: {
-      host: "localhost",
-      database: "mike-docker",
-      user: "admin",
-      password: "admin",
+      host: 'localhost',
+      database: 'chimchar-docker',
+      user: 'admin',
+      password: 'admin',
       port: 5431,
     },
   },
@@ -72,17 +72,17 @@ const knexConfig = {
   docker: {
     ...baseConfig,
     connection: {
-      host: "db",
-      database: "chimchar-docker",
-      user: "admin",
-      password: "admin",
-      port: 5432 || 5430,
+      host: 'localhost',
+      database: 'chimchar-docker',
+      user: 'admin',
+      password: 'admin',
+      port: 5430,
     },
   },
 };
 
 // Validate production config immediately if in production environment
-if (process.env.NODE_ENV === "production") {
+if (process.env.NODE_ENV === 'production') {
   validateProductionConfig();
 }
 

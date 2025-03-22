@@ -1,0 +1,40 @@
+services:
+  web:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://admin:admin@db:5430/chimchar-docker
+    ports:
+      - '3003:3003'
+    restart: unless-stopped
+    networks:
+      - my-network
+
+  db:
+    image: postgres:15
+    container_name: chimchar-db
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: chimchar-docker
+    ports:
+      - '5430:5430'
+    command: -p 5430
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U admin -d chimchar-docker']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - my-network
+
+volumes:
+  postgres_data:
+
+networks:
+  my-network:
+    name: my-network

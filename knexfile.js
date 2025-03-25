@@ -42,7 +42,7 @@ const knexConfig = {
       database: 'chimchar-docker',
       user: 'admin',
       password: 'admin',
-      port: 5431,
+      port: 5430,
     },
   },
   production: {
@@ -72,11 +72,11 @@ const knexConfig = {
   docker: {
     ...baseConfig,
     connection: {
-      host: 'localhost',
+      host: 'db',
       database: 'chimchar-docker',
       user: 'admin',
       password: 'admin',
-      port: 5430,
+      port: 5432,
     },
   },
 };

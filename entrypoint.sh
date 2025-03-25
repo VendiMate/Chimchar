@@ -1,9 +1,9 @@
 #!/bin/sh
 
 echo "Waiting for database to be ready..."
-while ! pg_isready -h db -p 5430 -U admin -d chimchar-docker
+while ! pg_isready -h db -p 5432 -U admin -d chimchar-docker
 do
-    echo "db:5430 - no response"
+    echo "db:5432 - no response"
     sleep 2
 done
 

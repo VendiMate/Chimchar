@@ -3,6 +3,14 @@ import { plugin as mapsPlugin } from './features/plugins/maps/index.js';
 const server = Hapi.server({
   port: process.env.PORT || 3003,
   host: 'localhost',
+  routes: {
+    cors: {
+      origin: ['http://localhost:3001'],
+
+      headers: ['Accept', 'Authorization', 'Content-Type'], // Common headers
+      additionalHeaders: ['X-Requested-With'], // Optional additional headers
+    },
+  },
   router: {
     stripTrailingSlash: true,
   },

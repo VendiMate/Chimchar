@@ -12,16 +12,9 @@ export async function up(knex) {
           "concat('vmi', lpad(floor(random() * 1000000)::text, 6, '0'))",
         ),
       );
-    table
-      .string('vending_machine_id')
-      .notNullable()
-      .references('vending_machine_locations.id');
-    table
-      .string('inventory_id')
-      .notNullable();
-    table
-      .enum('inventory_type', ['snack', 'drink'])
-      .notNullable();
+
+    table.string('inventory_id').notNullable();
+    table.enum('inventory_type', ['snack', 'drink']).notNullable();
     table.integer('quantity').notNullable();
     table.integer('price').notNullable();
     table.integer('row_number').notNullable();
@@ -66,7 +59,9 @@ export async function up(knex) {
  * @returns { Promise<void> }
  */
 export async function down(knex) {
-  await knex.raw('DROP TRIGGER IF EXISTS check_inventory_reference_trigger ON vending_machine_inventories');
+  await knex.raw(
+    'DROP TRIGGER IF EXISTS check_inventory_reference_trigger ON vending_machine_inventories',
+  );
   await knex.raw('DROP FUNCTION IF EXISTS check_inventory_reference');
   await knex.schema.dropTable('vending_machine_inventories');
 }

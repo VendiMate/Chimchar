@@ -1,13 +1,19 @@
-import Joi from '@hapi/joi';
+import Joi from 'joi';
+import {
+  getDrinks,
+  getDrinksByVendingMachine,
+  getSnacks,
+  getSnacksByVendingMachine,
+  getVendingMachines,
+  getVendingMachinesByCity,
+} from './controller.js';
 const register = async (server, options) => {
   //Get all vending machines
   server.route({
     method: 'GET',
     path: '/vending-machines',
     options: {
-      handler: async (request, h) => {
-        return null;
-      },
+      handler: getVendingMachines,
       validate: {},
     },
   });
@@ -16,9 +22,7 @@ const register = async (server, options) => {
     method: 'GET',
     path: '/vending-machines/{cityId}',
     options: {
-      handler: async (request, h) => {
-        return null;
-      },
+      handler: getVendingMachinesByCity,
       validate: {
         params: Joi.object({
           cityId: Joi.string().required(),
@@ -31,9 +35,7 @@ const register = async (server, options) => {
     method: 'GET',
     path: '/vending-machines/snacks',
     options: {
-      handler: async (request, h) => {
-        return null;
-      },
+      handler: getSnacks,
       validate: {},
     },
   });
@@ -42,9 +44,7 @@ const register = async (server, options) => {
     method: 'GET',
     path: '/vending-machines/drinks',
     options: {
-      handler: async (request, h) => {
-        return null;
-      },
+      handler: getDrinks,
       validate: {},
     },
   });
@@ -53,9 +53,7 @@ const register = async (server, options) => {
     method: 'GET',
     path: '/vending-machines/snacks/{vendingMachineId}',
     options: {
-      handler: async (request, h) => {
-        return null;
-      },
+      handler: getSnacksByVendingMachine,
       validate: {
         params: Joi.object({
           vendingMachineId: Joi.string().required(),
@@ -68,9 +66,7 @@ const register = async (server, options) => {
     method: 'GET',
     path: '/vending-machines/drinks/{vendingMachineId}',
     options: {
-      handler: async (request, h) => {
-        return null;
-      },
+      handler: getDrinksByVendingMachine,
       validate: {
         params: Joi.object({
           vendingMachineId: Joi.string().required(),
@@ -78,7 +74,6 @@ const register = async (server, options) => {
       },
     },
   });
-  
 };
 
 const name = 'inventory-plugin';

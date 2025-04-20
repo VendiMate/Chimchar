@@ -10,7 +10,7 @@ export async function up(knex) {
       .primary()
       .defaultTo(
         knex.raw(
-          "concat('loc_', lpad(floor(random() * 1000000)::text, 6, '0'))",
+          "concat('vml_', lpad(floor(random() * 1000000)::text, 6, '0'))",
         ),
       );
   });

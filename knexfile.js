@@ -68,6 +68,16 @@ const knexConfig = {
       };
     },
   },
+  local: {
+    ...baseConfig,
+    connection: {
+      host: 'localhost',
+      database: 'chimchar-docker',
+      user: 'admin',
+      password: 'admin',
+      port: 5430,
+    },
+  },
 };
 
 // Validate production config immediately if in production environment
@@ -76,3 +86,6 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 export default knexConfig;
+
+// For rollback
+// docker-compose exec app npm run db:rollback

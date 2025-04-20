@@ -26,4 +26,4 @@ export const createConflictError = (message) => {
 
 export const createInternalServerError = (message) => {
   return createError(errorTypes.INTERNAL_SERVER_ERROR, message, 500);
-}; 
+};

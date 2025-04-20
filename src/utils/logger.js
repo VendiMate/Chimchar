@@ -10,7 +10,7 @@ const esTransportOpts = {
     waitForActiveShards: 1,
     // Additional client options
     maxRetries: 5,
-    requestTimeout: 10000
+    requestTimeout: 10000,
   },
   indexPrefix: 'logs-app',
   dataStream: true,
@@ -20,18 +20,18 @@ const esTransportOpts = {
     template: {
       settings: {
         number_of_shards: 1,
-        number_of_replicas: 0
+        number_of_replicas: 0,
       },
       mappings: {
         properties: {
           '@timestamp': { type: 'date' },
           message: { type: 'text' },
           severity: { type: 'keyword' },
-          fields: { type: 'object' }
-        }
-      }
-    }
-  }
+          fields: { type: 'object' },
+        },
+      },
+    },
+  },
 };
 
 // Create Elasticsearch transport
@@ -50,25 +50,25 @@ const logger = winston.createLogger({
   level: 'info',
   format: winston.format.combine(
     winston.format.timestamp(),
-    winston.format.json()
+    winston.format.json(),
   ),
   transports: [
     // Console transport
     new winston.transports.Console({
       format: winston.format.combine(
         winston.format.colorize(),
-        winston.format.simple()
-      )
+        winston.format.simple(),
+      ),
     }),
     // Elasticsearch transport
-    esTransport
-  ]
+    esTransport,
+  ],
 });
 
 // Test the logger
 logger.info('Logger initialized successfully', {
   timestamp: new Date().toISOString(),
-  environment: process.env.NODE_ENV || 'development'
+  environment: process.env.NODE_ENV || 'development',
 });
 
-export default logger; 
+export default logger;

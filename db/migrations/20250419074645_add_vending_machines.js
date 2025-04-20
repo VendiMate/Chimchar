@@ -19,7 +19,7 @@ export async function up(knex) {
     table.string('z_coordinate');
     table.string('description');
 
-    table.foreign('city_id').references('location_cities.city_id');
+    table.foreign('city_id').references('location_cities.id');
   });
 }
 

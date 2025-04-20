@@ -21,9 +21,6 @@ export async function up(knex) {
     table.integer('column_number').notNullable();
     table.string('status').notNullable();
     table.timestamps(true, true);
-
-    // Add a unique constraint to ensure inventory_id and type combination is unique
-    table.unique(['inventory_id', 'inventory_type']);
   });
 
   // Add check constraint to ensure inventory_id references the correct table based on type
@@ -31,6 +28,17 @@ export async function up(knex) {
     CREATE OR REPLACE FUNCTION check_inventory_reference()
     RETURNS TRIGGER AS $$
     BEGIN
+      -- Check if the same inventory is already in the same position
+      IF EXISTS (
+        SELECT 1 FROM vending_machine_inventories 
+        WHERE vending_machine_id = NEW.vending_machine_id 
+        AND row_number = NEW.row_number 
+        AND column_number = NEW.column_number
+      ) THEN
+        RAISE EXCEPTION 'Position (row_number, column_number) is already occupied in this vending machine';
+      END IF;
+
+      -- Check if the inventory exists in the correct table
       IF NEW.inventory_type = 'snack' AND NOT EXISTS (
         SELECT 1 FROM snack_inventories WHERE id = NEW.inventory_id
       ) THEN

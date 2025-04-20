@@ -38,35 +38,11 @@ const knexConfig = {
   development: {
     ...baseConfig,
     connection: {
-      host: 'localhost',
+      host: 'db',
       database: 'chimchar-docker',
       user: 'admin',
       password: 'admin',
-      port: 5430,
-    },
-  },
-  production: {
-    ...baseConfig,
-    connection: () => {
-      validateProductionConfig();
-      return {
-        host: process.env.DB_HOST,
-        database: process.env.DB_NAME,
-        user: process.env.DB_USER,
-        password: String(process.env.DB_PASSWORD), // Ensure password is string
-        port: parseInt(process.env.DB_PORT, 10),
-        ssl: { rejectUnauthorized: false },
-      };
-    },
-    pool: {
-      min: 2,
-      max: 10,
-      // Add acquire and idle timeouts for Lambda environment
-      acquireTimeoutMillis: 30000,
-      createTimeoutMillis: 30000,
-      idleTimeoutMillis: 30000,
-      reapIntervalMillis: 1000,
-      createRetryIntervalMillis: 200,
+      port: 5432,
     },
   },
   docker: {
@@ -77,6 +53,19 @@ const knexConfig = {
       user: 'admin',
       password: 'admin',
       port: 5432,
+    },
+  },
+  production: {
+    ...baseConfig,
+    connection: () => {
+      validateProductionConfig();
+      return {
+        host: process.env.DB_HOST,
+        database: process.env.DB_NAME,
+        user: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
+        port: process.env.DB_PORT,
+      };
     },
   },
 };

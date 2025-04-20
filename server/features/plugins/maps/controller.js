@@ -2,7 +2,7 @@ import { db } from '../../../../db/index.js';
 import { FindClosestPoint } from './helper.js';
 export async function getCities(request, h) {
   try {
-    const cities = await db('location_cities').select('name', 'city_id');
+    const cities = await db('location_cities').select('name', 'id as city_id');
     return h.response(cities).code(200);
   } catch (error) {
     console.error(error);

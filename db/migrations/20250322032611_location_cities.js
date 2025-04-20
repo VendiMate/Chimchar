@@ -13,8 +13,6 @@ export async function up(knex) {
           "concat('lci_', lpad(floor(random() * 1000000)::text, 6, '0'))",
         ),
       );
-    // Create a city_id column that will be used as a primary key for city references
-    table.string('city_id').notNullable().unique(); // Make sure it's unique
     table.string('name').notNullable();
     table.string('state_id').notNullable();
     table.string('country_id').notNullable();

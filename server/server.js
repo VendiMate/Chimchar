@@ -1,8 +1,13 @@
 import Hapi from '@hapi/hapi';
 import { plugin as mapsPlugin } from './features/plugins/maps/index.js';
+import { plugin as inventoryPlugin } from './features/plugins/inventory/index.js';
+
+import { errorHandler } from './error-handler.js';
+import requestLogger from '../src/middleware/logger-handler.js';
+
 const server = Hapi.server({
   port: process.env.PORT || 3003,
-  host: 'localhost',
+  host: '0.0.0.0',
   routes: {
     cors: {
       origin: ['http://localhost:3001'],
@@ -18,12 +23,20 @@ const server = Hapi.server({
 
 const registerRoutes = async (server) => {
   await server.register([
+    requestLogger,
     {
       plugin: mapsPlugin,
       routes: {
         prefix: '/v1',
       },
     },
+    {
+      plugin: inventoryPlugin,
+      routes: {
+        prefix: '/v1',
+      },
+    },
+    errorHandler,
   ]);
   console.log('Routes registered successfully');
 };

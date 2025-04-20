@@ -3,8 +3,8 @@ export class AppError extends Error {
     super(message);
     this.statusCode = statusCode;
     this.isOperational = isOperational;
-    this.status = statusCode
-    
+    this.status = statusCode;
+
     Error.captureStackTrace(this, this.constructor);
   }
 }
@@ -27,4 +27,4 @@ export const errorMessages = {
   [errorTypes.FORBIDDEN]: 'Forbidden access',
   [errorTypes.CONFLICT]: 'Resource conflict',
   [errorTypes.INTERNAL_SERVER_ERROR]: 'Internal server error',
-}; 
+};

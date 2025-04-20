@@ -13,19 +13,19 @@ const requestLogger = {
     // Log the request after response is ready
     server.ext('onPreResponse', (request, h) => {
       const duration = Date.now() - request.app.startTime;
-      
+
       logger.info('API Request', {
         method: request.method,
         path: request.path,
         statusCode: request.response?.statusCode || 500,
         duration: `${duration}ms`,
         userAgent: request.headers['user-agent'],
-        ip: request.info.remoteAddress
+        ip: request.info.remoteAddress,
       });
 
       return h.continue;
     });
-  }
+  },
 };
 
-export default requestLogger; 
+export default requestLogger;

@@ -65,10 +65,10 @@ const logger = winston.createLogger({
   ],
 });
 
-// Test the logger
-logger.info('Logger initialized successfully', {
-  timestamp: new Date().toISOString(),
-  environment: process.env.NODE_ENV || 'development',
-});
+// // Test the logger
+// logger.info('Logger initialized successfully', {
+//   timestamp: new Date().toISOString(),
+//   environment: process.env.NODE_ENV || 'development',
+// });
 
 export default logger;

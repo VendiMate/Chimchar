@@ -3,7 +3,7 @@ import knexConfig from '../knexfile.js';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const environment = process.env.NODE_ENV || 'development';
+const environment = process.env.NODE_ENV || 'local';
 let config = knexConfig[environment];
 
 console.log('Environment:', environment);

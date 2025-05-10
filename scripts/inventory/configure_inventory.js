@@ -1,10 +1,11 @@
 import redis from 'redis';
 import logger from '../../src/utils/logger.js';
+import { createClient } from 'redis';
 import { db } from '../../db/index.js';
 
 // Assign client based on if running in docker or not
 const isDocker = process.env.DOCKER === 'true';
-const client = redis.createClient({
+const client = createClient({
   url: isDocker
     ? 'redis://:local@redis:6379/0'
     : 'redis://:local@localhost:6379/0',
@@ -51,8 +52,6 @@ async function configureInventory() {
       .select('*')
       .whereNotNull('quantity')
       .where('quantity', '>', 0);
-
-    console.log(snackInventories);
 
     snackInventories.forEach(async (snackInventory) => {
       const redisKey = `${snackInventory.vending_machine_id}:${snackInventory.inventory_id}:${snackInventory.row_number}:${snackInventory.column_number}`;

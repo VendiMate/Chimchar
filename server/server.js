@@ -1,10 +1,10 @@
 import Hapi from '@hapi/hapi';
 import { plugin as mapsPlugin } from './features/plugins/maps/index.js';
 import { plugin as inventoryPlugin } from './features/plugins/inventory/index.js';
-
+import { plugin as transactionPlugin } from './features/plugins/transaction/index.js';
 import { errorHandler } from './error-handler.js';
 import requestLogger from '../src/middleware/logger-handler.js';
-
+import logger from '../src/utils/logger.js';
 const server = Hapi.server({
   port: process.env.PORT || 3003,
   host: '0.0.0.0',
@@ -36,9 +36,15 @@ const registerRoutes = async (server) => {
         prefix: '/v1',
       },
     },
+    {
+      plugin: transactionPlugin,
+      routes: {
+        prefix: '/v1',
+      },
+    },
     errorHandler,
   ]);
-  console.log('Routes registered successfully');
+  logger.info('Routes registered successfully');
 };
 
 const configureServer = async () => {

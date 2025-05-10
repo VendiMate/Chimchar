@@ -1,4 +1,5 @@
 import { db } from '../../../../db/index.js';
+import logger from '../../../../src/utils/logger.js';
 import { FindClosestPoint } from './helper.js';
 export async function getCities(request, h) {
   try {
@@ -22,12 +23,13 @@ export async function getCoordinates(request, h) {
 
 export async function findClosestVendingMachine(request, h) {
   const { lat, long } = request.payload;
-  console.log(lat, long);
   let coordinates;
   try {
     coordinates = await db('vending_machine_locations').select('*');
   } catch (error) {
-    console.error(error);
+    logger.error('Error getting coordinates', {
+      error: error.message,
+    });
     return h.response({ message: 'Error getting coordinates' }).code(500);
   }
 
@@ -36,6 +38,5 @@ export async function findClosestVendingMachine(request, h) {
     long,
     coordinates,
   );
-  console.log('Closest Location: ', closestLocation);
   return h.response({ closestLocation, closestDistance }).code(200);
 }

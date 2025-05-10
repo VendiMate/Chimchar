@@ -9,14 +9,11 @@ export async function FindClosestPoint(lat, long, coordinates) {
       coord.x_coordinate,
       coord.y_coordinate,
     );
-    console.log(distance);
     if (distance < closestDistance) {
       closestDistance = distance;
       closestLocation = coord;
     }
   }
-  console.log('Closest Location: ', closestLocation);
-  console.log('Closest Distance: ', closestDistance);
   return { closestLocation, closestDistance };
 }
 

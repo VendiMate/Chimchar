@@ -6,24 +6,35 @@ import { ElasticsearchTransport } from 'winston-elasticsearch';
  * with console and Elasticsearch transports
  */
 const createLogger = () => {
-  // Configure Elasticsearch transport
-  const esTransportConfig = createElasticsearchTransportConfig();
-  const esTransport = new ElasticsearchTransport(esTransportConfig);
-
-  // Handle transport errors
-  esTransport.on('error', (error) => {
-    console.error('Elasticsearch transport error:', error.message);
-  });
-
-  // Create the logger instance
+  // Create base logger with console transport
   const logger = winston.createLogger({
     level: process.env.LOG_LEVEL || 'info',
     format: createLogFormat(),
     defaultMeta: { service: 'vending-machine-service' },
-    transports: [createConsoleTransport(), esTransport],
+    transports: [createConsoleTransport()],
     // Exit on error: false prevents winston from exiting on uncaught transport errors
     exitOnError: false,
   });
+
+  // Only add Elasticsearch transport if ELASTICSEARCH_NODE is configured
+  if (process.env.ELASTICSEARCH_NODE) {
+    try {
+      const esTransportConfig = createElasticsearchTransportConfig();
+      const esTransport = new ElasticsearchTransport(esTransportConfig);
+
+      // Handle transport errors silently to prevent crashes
+      esTransport.on('error', (error) => {
+        // Just log to console, don't throw
+        console.warn('Elasticsearch transport error (non-fatal):', error.message);
+      });
+
+      // Add the transport but don't let it crash the app
+      logger.add(esTransport);
+    } catch (error) {
+      // If transport creation fails, just log and continue without ES
+      console.warn('Failed to initialize Elasticsearch transport (non-fatal):', error.message);
+    }
+  }
 
   // Add request logger helper function
   logger.logRequest = createRequestLogger(logger);

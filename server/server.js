@@ -10,8 +10,7 @@ const server = Hapi.server({
   host: '0.0.0.0',
   routes: {
     cors: {
-      origin: ['http://localhost:3001'],
-
+      origin: ['http://localhost:3000', 'http://localhost:3001'],
       headers: ['Accept', 'Authorization', 'Content-Type'], // Common headers
       additionalHeaders: ['X-Requested-With'], // Optional additional headers
     },

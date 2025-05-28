@@ -1,4 +1,3 @@
-import redis from 'redis';
 import { createClient } from 'redis';
 import logger from '../../../src/utils/logger.js';
 
@@ -45,41 +44,40 @@ let connectionPromise = null;
 let retryCount = 0;
 const MAX_RETRIES = 5;
 
-const getConnection = async () => {
+const getConnection = () => {
   if (!connectionPromise) {
-    connectionPromise = new Promise(async (resolve, reject) => {
-      try {
-        await client.connect();
-        resolve();
-      } catch (err) {
-        connectionPromise = null;
-        retryCount++;
+    connectionPromise = new Promise((resolve, reject) => {
+      const attemptConnection = async () => {
+        try {
+          await client.connect();
+          resolve();
+        } catch (err) {
+          connectionPromise = null;
+          retryCount++;
 
-        if (retryCount >= MAX_RETRIES) {
-          logger.error('Failed to connect to Redis after max retries', {
+          if (retryCount >= MAX_RETRIES) {
+            logger.error('Failed to connect to Redis after max retries', {
+              error: err.message,
+              retryCount,
+            });
+            reject(new Error('Failed to connect to Redis after max retries'));
+            return;
+          }
+
+          logger.warn('Redis connection failed, retrying...', {
             error: err.message,
             retryCount,
+            nextRetryIn: '1s',
           });
-          reject(new Error('Failed to connect to Redis after max retries'));
-          return;
+
+          // Wait 1 second before retrying
+          setTimeout(() => {
+            attemptConnection().catch(reject);
+          }, 1000);
         }
+      };
 
-        logger.warn('Redis connection failed, retrying...', {
-          error: err.message,
-          retryCount,
-          nextRetryIn: '1s',
-        });
-
-        // Wait 1 second before retrying
-        setTimeout(async () => {
-          try {
-            await getConnection();
-            resolve();
-          } catch (retryErr) {
-            reject(retryErr);
-          }
-        }, 1000);
-      }
+      attemptConnection().catch(reject);
     });
   }
   return connectionPromise;

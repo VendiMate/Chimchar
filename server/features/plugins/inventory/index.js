@@ -2,6 +2,7 @@ import Joi from 'joi';
 import {
   getDrinks,
   getDrinksByVendingMachine,
+  getInventoryByVendingMachine,
   getSnacks,
   getSnacksByVendingMachine,
   getVendingMachines,
@@ -67,6 +68,20 @@ const register = async (server, options) => {
     path: '/vending-machines/drinks/{vendingMachineId}',
     options: {
       handler: getDrinksByVendingMachine,
+      validate: {
+        params: Joi.object({
+          vendingMachineId: Joi.string().required(),
+        }),
+      },
+    },
+  });
+
+  // Get all inventory by vending machine
+  server.route({
+    method: 'GET',
+    path: '/vending-machines/inventory/{vendingMachineId}',
+    options: {
+      handler: getInventoryByVendingMachine,
       validate: {
         params: Joi.object({
           vendingMachineId: Joi.string().required(),

@@ -40,7 +40,11 @@ jobs:
       - name: Check database connection
         run: npx knex migrate:status --env staging
         env:
-          DATABASE_URL: ${{ secrets.STAGING_DATABASE_URL }}
+          DB_HOST: ${{ secrets.STAGING_DB_HOST }}
+          DB_NAME: ${{ secrets.STAGING_DB_NAME }}
+          DB_USER: ${{ secrets.STAGING_DB_USER }}
+          DB_PASSWORD: ${{ secrets.STAGING_DB_PASSWORD }}
+          DB_PORT: ${{ secrets.STAGING_DB_PORT }}
 
   deploy-staging:
     needs: quality-checks
@@ -63,7 +67,11 @@ jobs:
       - name: Run database migrations
         run: npm run db:migrate:staging
         env:
-          DATABASE_URL: ${{ secrets.STAGING_DATABASE_URL }}
+          DB_HOST: ${{ secrets.STAGING_DB_HOST }}
+          DB_NAME: ${{ secrets.STAGING_DB_NAME }}
+          DB_USER: ${{ secrets.STAGING_DB_USER }}
+          DB_PASSWORD: ${{ secrets.STAGING_DB_PASSWORD }}
+          DB_PORT: ${{ secrets.STAGING_DB_PORT }}
 
       - name: Trigger Render Staging Deploy
         run: |

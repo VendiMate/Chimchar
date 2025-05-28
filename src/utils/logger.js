@@ -25,14 +25,20 @@ const createLogger = () => {
       // Handle transport errors silently to prevent crashes
       esTransport.on('error', (error) => {
         // Just log to console, don't throw
-        console.warn('Elasticsearch transport error (non-fatal):', error.message);
+        console.warn(
+          'Elasticsearch transport error (non-fatal):',
+          error.message,
+        );
       });
 
       // Add the transport but don't let it crash the app
       logger.add(esTransport);
     } catch (error) {
       // If transport creation fails, just log and continue without ES
-      console.warn('Failed to initialize Elasticsearch transport (non-fatal):', error.message);
+      console.warn(
+        'Failed to initialize Elasticsearch transport (non-fatal):',
+        error.message,
+      );
     }
   }
 

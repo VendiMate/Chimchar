@@ -333,7 +333,7 @@ export async function getInventoryByVendingMachine(request, h) {
 
     logger.logRequest({
       request,
-      message: 'Inventory fetch by vending machine completed',
+      message: 'Inventory fetch by vending machine completed!',
       start: startTime,
       additionalData: {
         vendingMachineId,

@@ -38,11 +38,6 @@ services:
           type: redis
           name: chimchar-redis-staging
           property: connectionString
-      - key: ELASTICSEARCH_NODE
-        fromService:
-          type: elasticsearch
-          name: chimchar-es-staging
-          property: connectionString
       - key: LOG_LEVEL
         value: debug
       - key: ALLOWED_ORIGINS
@@ -87,11 +82,6 @@ services:
           type: redis
           name: chimchar-redis
           property: connectionString
-      - key: ELASTICSEARCH_NODE
-        fromService:
-          type: elasticsearch
-          name: chimchar-es
-          property: connectionString
       - key: LOG_LEVEL
         value: info
       - key: ALLOWED_ORIGINS
@@ -108,18 +98,6 @@ services:
     name: chimchar-redis
     plan: starter
     maxmemoryPolicy: noeviction
-
-  # Staging Elasticsearch
-  - type: elasticsearch
-    name: chimchar-es-staging
-    plan: free
-    version: 8.12.1
-
-  # Production Elasticsearch
-  - type: elasticsearch
-    name: chimchar-es
-    plan: starter
-    version: 8.12.1
 
 databases:
   # Staging Database

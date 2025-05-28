@@ -93,7 +93,8 @@ services:
     plan: free
     maxmemoryPolicy: noeviction
     ipAllowList:
-      - 0.0.0.0/0  # Allow access from anywhere (since this is staging)
+      - source: 0.0.0.0/0
+        description: Allow access from staging web service
 
   # Production Redis
   - type: redis
@@ -101,7 +102,8 @@ services:
     plan: starter
     maxmemoryPolicy: noeviction
     ipAllowList:
-      - 0.0.0.0/0  # Allow access from anywhere (since this is production)
+      - source: 0.0.0.0/0
+        description: Allow access from production web service
 
 databases:
   # Staging Database

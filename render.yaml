@@ -1,0 +1,133 @@
+services:
+  # Staging API Service
+  - type: web
+    name: chimchar-api-staging
+    env: node
+    region: oregon
+    plan: free
+    branch: main
+    buildCommand: npm install && npm run db:migrate
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: staging
+      - key: PORT
+        value: 3003
+      - key: DB_HOST
+        fromDatabase:
+          name: chimchar-db-staging
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: chimchar-db-staging
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: chimchar-db-staging
+          property: database
+      - key: DB_USER
+        fromDatabase:
+          name: chimchar-db-staging
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: chimchar-db-staging
+          property: password
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: chimchar-redis-staging
+          property: connectionString
+      - key: ELASTICSEARCH_NODE
+        fromService:
+          type: elasticsearch
+          name: chimchar-es-staging
+          property: connectionString
+      - key: LOG_LEVEL
+        value: debug
+      - key: ALLOWED_ORIGINS
+        value: https://staging.chimchar.app,http://localhost:3000
+
+  # Production API Service
+  - type: web
+    name: chimchar-api
+    env: node
+    region: oregon
+    plan: starter
+    branch: main
+    buildCommand: npm install && npm run db:migrate
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3003
+      - key: DB_HOST
+        fromDatabase:
+          name: chimchar-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: chimchar-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: chimchar-db
+          property: database
+      - key: DB_USER
+        fromDatabase:
+          name: chimchar-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: chimchar-db
+          property: password
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: chimchar-redis
+          property: connectionString
+      - key: ELASTICSEARCH_NODE
+        fromService:
+          type: elasticsearch
+          name: chimchar-es
+          property: connectionString
+      - key: LOG_LEVEL
+        value: info
+      - key: ALLOWED_ORIGINS
+        value: https://chimchar.app,https://www.chimchar.app
+
+databases:
+  # Staging Database
+  - name: chimchar-db-staging
+    databaseName: chimchar_staging
+    user: chimchar_staging
+    plan: free
+
+  # Production Database
+  - name: chimchar-db
+    databaseName: chimchar_prod
+    user: chimchar_prod
+    plan: starter
+
+redis:
+  # Staging Redis
+  - name: chimchar-redis-staging
+    plan: free
+    maxmemoryPolicy: noeviction
+
+  # Production Redis
+  - name: chimchar-redis
+    plan: starter
+    maxmemoryPolicy: noeviction
+
+elasticsearch:
+  # Staging Elasticsearch
+  - name: chimchar-es-staging
+    plan: free
+    version: 8.12.1
+
+  # Production Elasticsearch
+  - name: chimchar-es
+    plan: starter
+    version: 8.12.1 

@@ -1,7 +1,7 @@
 {
   "type": "module",
   "scripts": {
-    "start": "nodemon --legacy-watch server/index.js",
+    "start": "nodemon --legacy-watch --exitcrash server/index.js",
     "db:migrate": "knex migrate:latest",
     "db:migrate:dev": "knex migrate:latest --env docker",
     "db:migrate:local": "knex migrate:latest --env local",
@@ -13,6 +13,9 @@
     "db:seed:prod": "knex seed:run --env production",
     "db:rollback": "knex migrate:rollback",
     "format": "prettier --write .",
+    "lint": "eslint . --ext .js",
+    "lint:fix": "eslint . --ext .js --fix",
+    "type-check": "echo 'No TypeScript in use'",
     "localdev:start": "docker-compose up --build"
   },
   "dependencies": {
@@ -28,6 +31,9 @@
     "winston-elasticsearch": "^0.19.0"
   },
   "devDependencies": {
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.1.3",
     "prettier": "^3.5.3"
   }
 }

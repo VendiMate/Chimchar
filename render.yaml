@@ -107,4 +107,4 @@ databases:
   - name: chimchar-db
     databaseName: chimchar_prod
     user: chimchar_prod
-    plan: free 
+    plan: free

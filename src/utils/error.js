@@ -1,4 +1,4 @@
-import { AppError, errorTypes } from '../errors/app-error.js';
+import { AppError, errorTypes, errorMessages } from '../errors/app-error.js';
 
 export const createError = (type, message, statusCode) => {
   return new AppError(message || errorMessages[type], statusCode);

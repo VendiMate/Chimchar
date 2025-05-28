@@ -19,8 +19,8 @@ export async function getVendingMachines(request, h) {
       message: 'Vending machines fetch completed',
       start: startTime,
       additionalData: {
-        count: vendingMachines.length
-      }
+        count: vendingMachines.length,
+      },
     });
 
     return h
@@ -35,7 +35,7 @@ export async function getVendingMachines(request, h) {
       message: 'Vending machines fetch failed',
       error,
       start: startTime,
-      level: 'error'
+      level: 'error',
     });
 
     return h
@@ -66,8 +66,8 @@ export async function getVendingMachinesByCity(request, h) {
         level: 'warn',
         additionalData: {
           cityId,
-          count: 0
-        }
+          count: 0,
+        },
       });
     }
 
@@ -77,8 +77,8 @@ export async function getVendingMachinesByCity(request, h) {
       start: startTime,
       additionalData: {
         cityId,
-        count: vendingMachinesByCity.length
-      }
+        count: vendingMachinesByCity.length,
+      },
     });
 
     return h
@@ -95,7 +95,7 @@ export async function getVendingMachinesByCity(request, h) {
         error,
         start: startTime,
         level: 'error',
-        additionalData: { cityId }
+        additionalData: { cityId },
       });
       throw error;
     }
@@ -106,9 +106,11 @@ export async function getVendingMachinesByCity(request, h) {
       error,
       start: startTime,
       level: 'error',
-      additionalData: { cityId }
+      additionalData: { cityId },
     });
-    throw createInternalServerError('Failed to fetch vending machines for city');
+    throw createInternalServerError(
+      'Failed to fetch vending machines for city',
+    );
   }
 }
 
@@ -123,8 +125,8 @@ export async function getSnacks(request, h) {
       message: 'Snacks fetch completed',
       start: startTime,
       additionalData: {
-        count: snacks.length
-      }
+        count: snacks.length,
+      },
     });
 
     return h
@@ -139,7 +141,7 @@ export async function getSnacks(request, h) {
       message: 'Failed to fetch snacks',
       error,
       start: startTime,
-      level: 'error'
+      level: 'error',
     });
     throw createInternalServerError('Failed to fetch snacks');
   }
@@ -156,8 +158,8 @@ export async function getDrinks(request, h) {
       message: 'Drinks fetch completed',
       start: startTime,
       additionalData: {
-        count: drinks.length
-      }
+        count: drinks.length,
+      },
     });
 
     return h
@@ -172,7 +174,7 @@ export async function getDrinks(request, h) {
       message: 'Failed to fetch drinks',
       error,
       start: startTime,
-      level: 'error'
+      level: 'error',
     });
     throw createInternalServerError('Failed to fetch drinks');
   }
@@ -198,8 +200,8 @@ export async function getSnacksByVendingMachine(request, h) {
         level: 'warn',
         additionalData: {
           vendingMachineId,
-          count: 0
-        }
+          count: 0,
+        },
       });
     }
 
@@ -226,8 +228,8 @@ export async function getSnacksByVendingMachine(request, h) {
         level: 'warn',
         additionalData: {
           vendingMachineId,
-          count: 0
-        }
+          count: 0,
+        },
       });
     }
 
@@ -237,8 +239,8 @@ export async function getSnacksByVendingMachine(request, h) {
       start: startTime,
       additionalData: {
         vendingMachineId,
-        count: snacksWithQuantity.length
-      }
+        count: snacksWithQuantity.length,
+      },
     });
 
     return h
@@ -254,9 +256,11 @@ export async function getSnacksByVendingMachine(request, h) {
       error,
       start: startTime,
       level: 'error',
-      additionalData: { vendingMachineId }
+      additionalData: { vendingMachineId },
     });
-    throw createInternalServerError('Failed to fetch snacks by vending machine');
+    throw createInternalServerError(
+      'Failed to fetch snacks by vending machine',
+    );
   }
 }
 
@@ -278,8 +282,8 @@ export async function getDrinksByVendingMachine(request, h) {
         level: 'warn',
         additionalData: {
           vendingMachineId,
-          count: 0
-        }
+          count: 0,
+        },
       });
     }
 
@@ -293,8 +297,8 @@ export async function getDrinksByVendingMachine(request, h) {
       start: startTime,
       additionalData: {
         vendingMachineId,
-        count: drinks.length
-      }
+        count: drinks.length,
+      },
     });
 
     return h
@@ -310,9 +314,11 @@ export async function getDrinksByVendingMachine(request, h) {
       error,
       start: startTime,
       level: 'error',
-      additionalData: { vendingMachineId }
+      additionalData: { vendingMachineId },
     });
-    throw createInternalServerError('Failed to fetch drinks by vending machine');
+    throw createInternalServerError(
+      'Failed to fetch drinks by vending machine',
+    );
   }
 }
 
@@ -338,8 +344,8 @@ export async function getInventoryByVendingMachine(request, h) {
       additionalData: {
         vendingMachineId,
         snackCount: inventory.snacks.length,
-        drinkCount: inventory.drinks.length
-      }
+        drinkCount: inventory.drinks.length,
+      },
     });
 
     return h
@@ -355,9 +361,11 @@ export async function getInventoryByVendingMachine(request, h) {
       error,
       start: startTime,
       level: 'error',
-      additionalData: { vendingMachineId }
+      additionalData: { vendingMachineId },
     });
-    
-    throw createInternalServerError('Failed to fetch inventory by vending machine');
+
+    throw createInternalServerError(
+      'Failed to fetch inventory by vending machine',
+    );
   }
 }

@@ -9,7 +9,7 @@ const createLogger = () => {
   // Configure Elasticsearch transport
   const esTransportConfig = createElasticsearchTransportConfig();
   const esTransport = new ElasticsearchTransport(esTransportConfig);
-  
+
   // Handle transport errors
   esTransport.on('error', (error) => {
     console.error('Elasticsearch transport error:', error.message);
@@ -20,17 +20,14 @@ const createLogger = () => {
     level: process.env.LOG_LEVEL || 'info',
     format: createLogFormat(),
     defaultMeta: { service: 'vending-machine-service' },
-    transports: [
-      createConsoleTransport(),
-      esTransport
-    ],
+    transports: [createConsoleTransport(), esTransport],
     // Exit on error: false prevents winston from exiting on uncaught transport errors
-    exitOnError: false
+    exitOnError: false,
   });
 
   // Add request logger helper function
   logger.logRequest = createRequestLogger(logger);
-  
+
   return logger;
 };
 
@@ -70,11 +67,11 @@ const createElasticsearchTransportConfig = () => {
               properties: {
                 message: { type: 'text' },
                 stack: { type: 'text' },
-                code: { type: 'keyword' }
-              }
+                code: { type: 'keyword' },
+              },
             },
             // Add other fields as needed
-            metadata: { type: 'object', dynamic: true }
+            metadata: { type: 'object', dynamic: true },
           },
         },
       },
@@ -82,7 +79,7 @@ const createElasticsearchTransportConfig = () => {
     // Circuit breaker pattern
     retryLimit: 3,
     retryInterval: 2000,
-    bufferLimit: 100 // Store up to 100 logs if ES is down
+    bufferLimit: 100, // Store up to 100 logs if ES is down
   };
 };
 
@@ -100,7 +97,7 @@ const createLogFormat = () => {
         info.error = {
           message: info.error.message,
           stack: info.error.stack,
-          ...(info.error.code ? { code: info.error.code } : {})
+          ...(info.error.code ? { code: info.error.code } : {}),
         };
       }
     }
@@ -111,7 +108,7 @@ const createLogFormat = () => {
     winston.format.timestamp(),
     errorFormat(),
     winston.format.errors({ stack: true }),
-    winston.format.json()
+    winston.format.json(),
   );
 };
 
@@ -124,20 +121,22 @@ const createConsoleTransport = () => {
       winston.format.colorize(),
       winston.format.printf(({ level, message, timestamp, ...rest }) => {
         // Format error objects for better console readability
-        const errorStr = rest.error 
-          ? `\n  Error: ${typeof rest.error === 'object' 
-              ? rest.error.message || JSON.stringify(rest.error) 
-              : rest.error}`
+        const errorStr = rest.error
+          ? `\n  Error: ${
+              typeof rest.error === 'object'
+                ? rest.error.message || JSON.stringify(rest.error)
+                : rest.error
+            }`
           : '';
-          
+
         // Clean up metadata for console display
         const { error, ...metadata } = rest;
-        const metaStr = Object.keys(metadata).length 
-  ? ` ${JSON.stringify(metadata)}` 
-  : '';
-          
+        const metaStr = Object.keys(metadata).length
+          ? ` ${JSON.stringify(metadata)}`
+          : '';
+
         return `${timestamp} ${level}: ${message}${errorStr}${metaStr}`;
-      })
+      }),
     ),
   });
 };
@@ -153,7 +152,7 @@ const createRequestLogger = (logger) => {
       message,
       error = null,
       start = null,
-      additionalData = {}
+      additionalData = {},
     } = opts;
 
     // Calculate request duration if start time was provided
@@ -166,7 +165,7 @@ const createRequestLogger = (logger) => {
       path: request?.path,
       duration,
       status: error ? 'error' : 'success',
-      ...additionalData
+      ...additionalData,
     };
 
     // Add error information if present
@@ -176,7 +175,7 @@ const createRequestLogger = (logger) => {
 
     // Log with appropriate level
     logger.log(level, message, logData);
-    
+
     return logData;
   };
 };

@@ -80,30 +80,21 @@ services:
       - key: REDIS_URL
         fromService:
           type: redis
-          name: chimchar-redis
+          name: chimchar-redis-staging
           property: connectionString
       - key: LOG_LEVEL
         value: info
       - key: ALLOWED_ORIGINS
         value: https://chimchar.app,https://www.chimchar.app
 
-  # Staging Redis
+  # Staging Redis (shared)
   - type: redis
     name: chimchar-redis-staging
     plan: free
     maxmemoryPolicy: noeviction
     ipAllowList:
       - source: 0.0.0.0/0
-        description: Allow access from staging web service
-
-  # Production Redis
-  - type: redis
-    name: chimchar-redis
-    plan: free
-    maxmemoryPolicy: noeviction
-    ipAllowList:
-      - source: 0.0.0.0/0
-        description: Allow access from production web service
+        description: Allow access from web services
 
 databases:
   # Staging Database

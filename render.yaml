@@ -92,12 +92,16 @@ services:
     name: chimchar-redis-staging
     plan: free
     maxmemoryPolicy: noeviction
+    ipAllowList:
+      - 0.0.0.0/0  # Allow access from anywhere (since this is staging)
 
   # Production Redis
   - type: redis
     name: chimchar-redis
     plan: starter
     maxmemoryPolicy: noeviction
+    ipAllowList:
+      - 0.0.0.0/0  # Allow access from anywhere (since this is production)
 
 databases:
   # Staging Database

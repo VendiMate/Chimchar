@@ -13,8 +13,11 @@
     "db:seed:prod": "knex seed:run --env production",
     "db:rollback": "knex migrate:rollback",
     "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "lint": "eslint . --ext .js",
     "lint:fix": "eslint . --ext .js --fix",
+    "fix": "prettier --write --ignore-unknown . && eslint . --ext .js --fix",
+    "format-check": "prettier --check . && eslint . --ext .js",
     "type-check": "echo 'No TypeScript in use'",
     "localdev:start": "docker-compose up --build"
   },

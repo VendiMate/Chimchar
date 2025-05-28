@@ -43,14 +43,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - name: Install Render CLI
-        run: curl -o- https://render.com/download/install.sh | bash
-
-      - name: Deploy to Render (Staging)
+      - name: Trigger Render Staging Deploy
         run: |
-          render-cli deploy ${{ secrets.RENDER_STAGING_SERVICE_ID }} --token ${{ secrets.RENDER_API_KEY }}
-        env:
-          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          curl -X POST "https://api.render.com/v1/services/${{ secrets.RENDER_STAGING_SERVICE_ID }}/deploys" \
+          -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+          -H "Content-Type: application/json"
 
   deploy-production:
     needs: [lint, deploy-staging]
@@ -61,11 +58,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - name: Install Render CLI
-        run: curl -o- https://render.com/download/install.sh | bash
-
-      - name: Deploy to Render (Production)
+      - name: Trigger Render Production Deploy
         run: |
-          render-cli deploy ${{ secrets.RENDER_PRODUCTION_SERVICE_ID }} --token ${{ secrets.RENDER_API_KEY }}
-        env:
-          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }} 
+          curl -X POST "https://api.render.com/v1/services/${{ secrets.RENDER_PRODUCTION_SERVICE_ID }}/deploys" \
+          -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+          -H "Content-Type: application/json" 

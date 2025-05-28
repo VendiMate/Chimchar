@@ -17,7 +17,7 @@ on:
         default: false
 
 jobs:
-  lint:
+  quality-checks:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -32,16 +32,38 @@ jobs:
         run: npm ci
 
       - name: Run linting
-        run: npm run lint -- --max-warnings 0 || true
+        run: npm run lint -- --max-warnings 0
+
+      - name: Check formatting
+        run: npm run format:check
+
+      - name: Run database migrations check
+        run: npm run db:migrate:staging -- --dry-run
+        env:
+          DATABASE_URL: ${{ secrets.STAGING_DATABASE_URL }}
 
   deploy-staging:
-    needs: lint
+    needs: quality-checks
     if: (github.ref == 'refs/heads/main' && github.event_name == 'push') || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     environment: staging
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run database migrations
+        run: npm run db:migrate:staging
+        env:
+          DATABASE_URL: ${{ secrets.STAGING_DATABASE_URL }}
 
       - name: Trigger Render Staging Deploy
         run: |
@@ -50,13 +72,27 @@ jobs:
           -H "Content-Type: application/json"
 
   deploy-production:
-    needs: [lint, deploy-staging]
+    needs: [quality-checks, deploy-staging]
     if: github.event.inputs.deploy_to_production == true
     runs-on: ubuntu-latest
     environment: production
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run database migrations
+        run: npm run db:migrate:prod
+        env:
+          DATABASE_URL: ${{ secrets.PRODUCTION_DATABASE_URL }}
 
       - name: Trigger Render Production Deploy
         run: |

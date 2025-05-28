@@ -97,6 +97,30 @@ services:
       - key: ALLOWED_ORIGINS
         value: https://chimchar.app,https://www.chimchar.app
 
+  # Staging Redis
+  - type: redis
+    name: chimchar-redis-staging
+    plan: free
+    maxmemoryPolicy: noeviction
+
+  # Production Redis
+  - type: redis
+    name: chimchar-redis
+    plan: starter
+    maxmemoryPolicy: noeviction
+
+  # Staging Elasticsearch
+  - type: elasticsearch
+    name: chimchar-es-staging
+    plan: free
+    version: 8.12.1
+
+  # Production Elasticsearch
+  - type: elasticsearch
+    name: chimchar-es
+    plan: starter
+    version: 8.12.1
+
 databases:
   # Staging Database
   - name: chimchar-db-staging
@@ -108,26 +132,4 @@ databases:
   - name: chimchar-db
     databaseName: chimchar_prod
     user: chimchar_prod
-    plan: starter
-
-redis:
-  # Staging Redis
-  - name: chimchar-redis-staging
-    plan: free
-    maxmemoryPolicy: noeviction
-
-  # Production Redis
-  - name: chimchar-redis
-    plan: starter
-    maxmemoryPolicy: noeviction
-
-elasticsearch:
-  # Staging Elasticsearch
-  - name: chimchar-es-staging
-    plan: free
-    version: 8.12.1
-
-  # Production Elasticsearch
-  - name: chimchar-es
-    plan: starter
-    version: 8.12.1 
+    plan: starter 

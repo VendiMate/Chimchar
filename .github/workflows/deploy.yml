@@ -43,12 +43,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
+      - name: Install Render CLI
+        run: npm install -g @render/cli
+
       - name: Deploy to Render (Staging)
-        uses: render-actions/deploy@v1
-        with:
-          service-id: ${{ secrets.RENDER_STAGING_SERVICE_ID }}
-          api-key: ${{ secrets.RENDER_API_KEY }}
-          environment: staging
+        run: |
+          render deploy ${{ secrets.RENDER_STAGING_SERVICE_ID }} --token ${{ secrets.RENDER_API_KEY }}
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
 
   deploy-production:
     needs: [lint, deploy-staging]
@@ -59,9 +61,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
+      - name: Install Render CLI
+        run: npm install -g @render/cli
+
       - name: Deploy to Render (Production)
-        uses: render-actions/deploy@v1
-        with:
-          service-id: ${{ secrets.RENDER_PRODUCTION_SERVICE_ID }}
-          api-key: ${{ secrets.RENDER_API_KEY }}
-          environment: production 
+        run: |
+          render deploy ${{ secrets.RENDER_PRODUCTION_SERVICE_ID }} --token ${{ secrets.RENDER_API_KEY }}
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }} 

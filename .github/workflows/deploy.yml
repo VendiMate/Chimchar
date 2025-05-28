@@ -37,8 +37,8 @@ jobs:
       - name: Check formatting
         run: npm run format:check
 
-      - name: Check database migrations
-        run: npm run db:migrate:staging -- --list
+      - name: Check database connection
+        run: npx knex migrate:status --env staging
         env:
           DATABASE_URL: ${{ secrets.STAGING_DATABASE_URL }}
 

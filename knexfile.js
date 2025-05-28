@@ -37,8 +37,8 @@ const validateProductionConfig = () => {
 // Helper function to get SSL config for Render
 const getRenderSSLConfig = () => ({
   ssl: {
-    rejectUnauthorized: false // This allows self-signed certificates
-  }
+    rejectUnauthorized: false, // This allows self-signed certificates
+  },
 });
 
 const knexConfig = {

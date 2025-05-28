@@ -36,7 +36,7 @@ const validateProductionConfig = () => {
 
 // Helper function to get SSL config for Render
 const getRenderSSLConfig = () => ({
-  ssl: true
+  ssl: true,
 });
 
 const knexConfig = {
@@ -70,7 +70,7 @@ const knexConfig = {
         user: process.env.DB_USER,
         password: process.env.DB_PASSWORD,
         port: process.env.DB_PORT,
-        ...getRenderSSLConfig()
+        ...getRenderSSLConfig(),
       };
     },
   },
@@ -84,7 +84,7 @@ const knexConfig = {
         user: process.env.DB_USER,
         password: process.env.DB_PASSWORD,
         port: process.env.DB_PORT,
-        ...getRenderSSLConfig()
+        ...getRenderSSLConfig(),
       };
     },
   },

@@ -48,7 +48,7 @@ services:
     name: chimchar-api
     env: node
     region: oregon
-    plan: starter
+    plan: free
     branch: main
     buildCommand: npm install && npm run db:migrate
     startCommand: npm start
@@ -99,7 +99,7 @@ services:
   # Production Redis
   - type: redis
     name: chimchar-redis
-    plan: starter
+    plan: free
     maxmemoryPolicy: noeviction
     ipAllowList:
       - source: 0.0.0.0/0
@@ -116,4 +116,4 @@ databases:
   - name: chimchar-db
     databaseName: chimchar_prod
     user: chimchar_prod
-    plan: starter 
+    plan: free 

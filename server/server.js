@@ -5,14 +5,16 @@ import { plugin as transactionPlugin } from './features/plugins/transaction/inde
 import { errorHandler } from './error-handler.js';
 import requestLogger from '../src/middleware/logger-handler.js';
 import logger from '../src/utils/logger.js';
+import config from '../src/config/index.js';
+
 const server = Hapi.server({
   port: process.env.PORT || 3003,
   host: '0.0.0.0',
   routes: {
     cors: {
-      origin: ['http://localhost:3000', 'http://localhost:3001'],
-      headers: ['Accept', 'Authorization', 'Content-Type'], // Common headers
-      additionalHeaders: ['X-Requested-With'], // Optional additional headers
+      origin: config.api.cors,
+      headers: ['Accept', 'Authorization', 'Content-Type'],
+      additionalHeaders: ['X-Requested-With'],
     },
   },
   router: {

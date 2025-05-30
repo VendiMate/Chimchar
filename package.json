@@ -7,6 +7,7 @@
     "db:migrate:local": "knex migrate:latest --env local",
     "db:migrate:staging": "knex migrate:latest --env staging",
     "db:migrate:prod": "knex migrate:latest --env production",
+    "db:migrate:make": "knex migrate:make",
     "db:seed:local": "knex seed:run --env local",
     "db:rollback:local": "knex migrate:rollback --env local",
     "db:seed": "knex seed:run",

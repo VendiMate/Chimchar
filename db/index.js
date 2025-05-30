@@ -20,7 +20,7 @@ if (environment !== 'local') {
   };
 }
 
-logger.info('Environment:', environment);
+logger.info(`Environment: ${environment}`);
 
 const db = knex(dbConfig);
 

@@ -1,4 +1,4 @@
-import { db } from '../../../../db/index.js';
+import db from '../../../../db/index.js';
 import { AppError } from '../../../../src/errors/app-error.js';
 import {
   createNotFoundError,
@@ -30,6 +30,7 @@ export async function getVendingMachines(request, h) {
       })
       .code(200);
   } catch (error) {
+    console.error(error);
     logger.logRequest({
       request,
       message: 'Vending machines fetch failed',

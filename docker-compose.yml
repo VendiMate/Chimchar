@@ -38,7 +38,7 @@ services:
     ports:
       - '3003:3003'
     environment:
-      - NODE_ENV=development
+      - NODE_ENV=local
       - ELASTICSEARCH_URL=http://elasticsearch:9200
       - DATABASE_URL=postgres://admin:admin@db:5432/chimchar-docker
       - REDIS_URL=redis://:local@redis:6379/0

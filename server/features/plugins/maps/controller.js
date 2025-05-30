@@ -1,4 +1,4 @@
-import { db } from '../../../../db/index.js';
+import db from '../../../../db/index.js';
 import logger from '../../../../src/utils/logger.js';
 import { FindClosestPoint } from './helper.js';
 export async function getCities(request, h) {

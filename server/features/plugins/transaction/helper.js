@@ -1,6 +1,5 @@
-import { db } from '../../../../db/index.js';
 import logger from '../../../../src/utils/logger.js';
-
+import db from '../../../../db/index.js';
 /**
  * Validates if a vending machine slot exists with the given parameters.
  * Returns the full inventory row if found, otherwise throws an error.

@@ -1,5 +1,5 @@
 import knex from 'knex';
-import knexfile from './knexfile.js';
+import knexfile from '../knexfile.js';
 import config from '../src/config/index.js';
 import dotenv from 'dotenv';
 import logger from '../src/utils/logger.js';

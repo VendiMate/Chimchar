@@ -93,11 +93,11 @@ const knexConfig = {
   local: {
     ...baseConfig,
     connection: {
-      host: 'localhost',
+      host: 'db',
       database: 'chimchar-docker',
       user: 'admin',
       password: 'admin',
-      port: 5430,
+      port: 5432,
     },
   },
 };

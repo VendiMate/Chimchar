@@ -1,8 +1,7 @@
 import redis from 'redis';
 import logger from '../../src/utils/logger.js';
 import { createClient } from 'redis';
-import { db } from '../../db/index.js';
-
+import db from '../../db/index.js';
 // Assign client based on if running in docker or not
 const isDocker = process.env.DOCKER === 'true';
 const client = createClient({

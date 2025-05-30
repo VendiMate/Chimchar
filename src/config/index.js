@@ -27,7 +27,7 @@ const environments = {
       cors: [
         'https://staging.chimchar.app',
         'http://localhost:3000',
-        'https://vendimate.netlify.app',
+        'https://vendimate-staging.netlify.app',
       ],
     },
     database: {

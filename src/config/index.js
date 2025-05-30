@@ -24,7 +24,11 @@ const environments = {
   staging: {
     api: {
       url: 'https://chimchar-api-staging.onrender.com',
-      cors: ['https://staging.chimchar.app', 'http://localhost:3000'],
+      cors: [
+        'https://staging.chimchar.app',
+        'http://localhost:3000',
+        'https://vendimate.netlify.app',
+      ],
     },
     database: {
       host: process.env.DB_HOST,

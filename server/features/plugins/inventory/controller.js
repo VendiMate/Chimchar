@@ -1,4 +1,4 @@
-import db from '../../../../db/index.js';
+import { db } from '../../../../db/index.js';
 import { AppError } from '../../../../src/errors/app-error.js';
 import {
   createNotFoundError,
@@ -6,7 +6,6 @@ import {
   createInternalServerError,
 } from '../../../../src/utils/error.js';
 import { validateCityId, validateVendingMachineId } from './helper.js';
-import logger from '../../../../src/utils/logger.js';
 
 export async function getVendingMachines(request, h) {
   const startTime = Date.now();
@@ -14,13 +13,11 @@ export async function getVendingMachines(request, h) {
   try {
     const vendingMachines = await db('vending_machines').select('*');
 
-    logger.logRequest({
-      request,
-      message: 'Vending machines fetch completed',
-      start: startTime,
-      additionalData: {
-        count: vendingMachines.length,
-      },
+    console.log('Vending machines fetch completed', {
+      method: request.method,
+      path: request.path,
+      duration: `${Date.now() - startTime}ms`,
+      count: vendingMachines.length,
     });
 
     return h
@@ -30,13 +27,12 @@ export async function getVendingMachines(request, h) {
       })
       .code(200);
   } catch (error) {
-    console.error(error);
-    logger.logRequest({
-      request,
-      message: 'Vending machines fetch failed',
-      error,
-      start: startTime,
-      level: 'error',
+    console.error('Vending machines fetch failed:', error);
+    console.log('Vending machines fetch failed', {
+      method: request.method,
+      path: request.path,
+      duration: `${Date.now() - startTime}ms`,
+      error: error.message,
     });
 
     return h
@@ -60,26 +56,21 @@ export async function getVendingMachinesByCity(request, h) {
       .where('city_id', cityId);
 
     if (vendingMachinesByCity.length === 0) {
-      logger.logRequest({
-        request,
-        message: 'No vending machines found for city',
-        start: startTime,
-        level: 'warn',
-        additionalData: {
-          cityId,
-          count: 0,
-        },
+      console.log('No vending machines found for city', {
+        method: request.method,
+        path: request.path,
+        duration: `${Date.now() - startTime}ms`,
+        cityId,
+        count: 0,
       });
     }
 
-    logger.logRequest({
-      request,
-      message: 'Vending machines fetch by city completed',
-      start: startTime,
-      additionalData: {
-        cityId,
-        count: vendingMachinesByCity.length,
-      },
+    console.log('Vending machines fetch by city completed', {
+      method: request.method,
+      path: request.path,
+      duration: `${Date.now() - startTime}ms`,
+      cityId,
+      count: vendingMachinesByCity.length,
     });
 
     return h
@@ -90,24 +81,24 @@ export async function getVendingMachinesByCity(request, h) {
       .code(200);
   } catch (error) {
     if (error instanceof AppError) {
-      logger.logRequest({
-        request,
-        message: 'Custom error in vending machines by city fetch',
-        error,
-        start: startTime,
-        level: 'error',
-        additionalData: { cityId },
+      console.error('Custom error in vending machines by city fetch:', error);
+      console.log('Custom error in vending machines by city fetch', {
+        method: request.method,
+        path: request.path,
+        duration: `${Date.now() - startTime}ms`,
+        cityId,
+        error: error.message,
       });
       throw error;
     }
 
-    logger.logRequest({
-      request,
-      message: 'Failed to fetch vending machines for city',
-      error,
-      start: startTime,
-      level: 'error',
-      additionalData: { cityId },
+    console.error('Failed to fetch vending machines for city:', error);
+    console.log('Failed to fetch vending machines for city', {
+      method: request.method,
+      path: request.path,
+      duration: `${Date.now() - startTime}ms`,
+      cityId,
+      error: error.message,
     });
     throw createInternalServerError(
       'Failed to fetch vending machines for city',
@@ -121,13 +112,11 @@ export async function getSnacks(request, h) {
   try {
     const snacks = await db('snack_inventories').select('*');
 
-    logger.logRequest({
-      request,
-      message: 'Snacks fetch completed',
-      start: startTime,
-      additionalData: {
-        count: snacks.length,
-      },
+    console.log('Snacks fetch completed', {
+      method: request.method,
+      path: request.path,
+      duration: `${Date.now() - startTime}ms`,
+      count: snacks.length,
     });
 
     return h
@@ -137,12 +126,12 @@ export async function getSnacks(request, h) {
       })
       .code(200);
   } catch (error) {
-    logger.logRequest({
-      request,
-      message: 'Failed to fetch snacks',
-      error,
-      start: startTime,
-      level: 'error',
+    console.error('Failed to fetch snacks:', error);
+    console.log('Failed to fetch snacks', {
+      method: request.method,
+      path: request.path,
+      duration: `${Date.now() - startTime}ms`,
+      error: error.message,
     });
     throw createInternalServerError('Failed to fetch snacks');
   }
@@ -154,13 +143,11 @@ export async function getDrinks(request, h) {
   try {
     const drinks = await db('drink_inventories').select('*');
 
-    logger.logRequest({
-      request,
-      message: 'Drinks fetch completed',
-      start: startTime,
-      additionalData: {
-        count: drinks.length,
-      },
+    console.log('Drinks fetch completed', {
+      method: request.method,
+      path: request.path,
+      duration: `${Date.now() - startTime}ms`,
+      count: drinks.length,
     });
 
     return h
@@ -170,12 +157,12 @@ export async function getDrinks(request, h) {
       })
       .code(200);
   } catch (error) {
-    logger.logRequest({
-      request,
-      message: 'Failed to fetch drinks',
-      error,
-      start: startTime,
-      level: 'error',
+    console.error('Failed to fetch drinks:', error);
+    console.log('Failed to fetch drinks', {
+      method: request.method,
+      path: request.path,
+      duration: `${Date.now() - startTime}ms`,
+      error: error.message,
     });
     throw createInternalServerError('Failed to fetch drinks');
   }
@@ -194,73 +181,52 @@ export async function getSnacksByVendingMachine(request, h) {
       .where('inventory_type', 'snack');
 
     if (snackInventoryItems.length === 0) {
-      logger.logRequest({
-        request,
-        message: 'No snacks found for vending machine',
-        start: startTime,
-        level: 'warn',
-        additionalData: {
-          vendingMachineId,
-          count: 0,
-        },
-      });
-    }
-
-    const inventoryIds = snackInventoryItems.map((item) => item.inventory_id);
-    const snacks = await db('snack_inventories')
-      .select('*')
-      .whereIn('id', inventoryIds);
-
-    const snacksWithQuantity = snacks.map((snack) => {
-      const quantity = snackInventoryItems.find(
-        (item) => item.inventory_id === snack.id,
-      )?.quantity;
-      return {
-        ...snack,
-        quantity: quantity,
-      };
-    });
-
-    if (snacksWithQuantity.length === 0) {
-      logger.logRequest({
-        request,
-        message: 'Found vending machine but no snacks found',
-        start: startTime,
-        level: 'warn',
-        additionalData: {
-          vendingMachineId,
-          count: 0,
-        },
-      });
-    }
-
-    logger.logRequest({
-      request,
-      message: 'Snacks fetch by vending machine completed',
-      start: startTime,
-      additionalData: {
+      console.log('No snacks found for vending machine', {
+        method: request.method,
+        path: request.path,
+        duration: `${Date.now() - startTime}ms`,
         vendingMachineId,
-        count: snacksWithQuantity.length,
-      },
+        count: 0,
+      });
+    }
+
+    console.log('Snacks by vending machine fetch completed', {
+      method: request.method,
+      path: request.path,
+      duration: `${Date.now() - startTime}ms`,
+      vendingMachineId,
+      count: snackInventoryItems.length,
     });
 
     return h
       .response({
         status: '200',
-        data: snacksWithQuantity,
+        data: snackInventoryItems,
       })
       .code(200);
   } catch (error) {
-    logger.logRequest({
-      request,
-      message: 'Failed to fetch snacks by vending machine',
-      error,
-      start: startTime,
-      level: 'error',
-      additionalData: { vendingMachineId },
+    if (error instanceof AppError) {
+      console.error('Custom error in snacks by vending machine fetch:', error);
+      console.log('Custom error in snacks by vending machine fetch', {
+        method: request.method,
+        path: request.path,
+        duration: `${Date.now() - startTime}ms`,
+        vendingMachineId,
+        error: error.message,
+      });
+      throw error;
+    }
+
+    console.error('Failed to fetch snacks for vending machine:', error);
+    console.log('Failed to fetch snacks for vending machine', {
+      method: request.method,
+      path: request.path,
+      duration: `${Date.now() - startTime}ms`,
+      vendingMachineId,
+      error: error.message,
     });
     throw createInternalServerError(
-      'Failed to fetch snacks by vending machine',
+      'Failed to fetch snacks for vending machine',
     );
   }
 }
@@ -270,55 +236,60 @@ export async function getDrinksByVendingMachine(request, h) {
   const vendingMachineId = request.params.vendingMachineId;
 
   try {
-    const drinkInventoryIds = await db('vending_machine_inventories')
-      .select('inventory_id')
+    await validateVendingMachineId(vendingMachineId, request);
+
+    const drinkInventoryItems = await db('vending_machine_inventories')
+      .select('inventory_id', 'quantity')
       .where('vending_machine_id', vendingMachineId)
       .where('inventory_type', 'drink');
 
-    if (drinkInventoryIds.length === 0) {
-      logger.logRequest({
-        request,
-        message: 'No drinks found for vending machine',
-        start: startTime,
-        level: 'warn',
-        additionalData: {
-          vendingMachineId,
-          count: 0,
-        },
+    if (drinkInventoryItems.length === 0) {
+      console.log('No drinks found for vending machine', {
+        method: request.method,
+        path: request.path,
+        duration: `${Date.now() - startTime}ms`,
+        vendingMachineId,
+        count: 0,
       });
     }
 
-    const drinks = await db('drink_inventories')
-      .select('*')
-      .whereIn('id', drinkInventoryIds);
-
-    logger.logRequest({
-      request,
-      message: 'Drinks fetch by vending machine completed',
-      start: startTime,
-      additionalData: {
-        vendingMachineId,
-        count: drinks.length,
-      },
+    console.log('Drinks by vending machine fetch completed', {
+      method: request.method,
+      path: request.path,
+      duration: `${Date.now() - startTime}ms`,
+      vendingMachineId,
+      count: drinkInventoryItems.length,
     });
 
     return h
       .response({
         status: '200',
-        data: drinks,
+        data: drinkInventoryItems,
       })
       .code(200);
   } catch (error) {
-    logger.logRequest({
-      request,
-      message: 'Failed to fetch drinks by vending machine',
-      error,
-      start: startTime,
-      level: 'error',
-      additionalData: { vendingMachineId },
+    if (error instanceof AppError) {
+      console.error('Custom error in drinks by vending machine fetch:', error);
+      console.log('Custom error in drinks by vending machine fetch', {
+        method: request.method,
+        path: request.path,
+        duration: `${Date.now() - startTime}ms`,
+        vendingMachineId,
+        error: error.message,
+      });
+      throw error;
+    }
+
+    console.error('Failed to fetch drinks for vending machine:', error);
+    console.log('Failed to fetch drinks for vending machine', {
+      method: request.method,
+      path: request.path,
+      duration: `${Date.now() - startTime}ms`,
+      vendingMachineId,
+      error: error.message,
     });
     throw createInternalServerError(
-      'Failed to fetch drinks by vending machine',
+      'Failed to fetch drinks for vending machine',
     );
   }
 }
@@ -330,43 +301,57 @@ export async function getInventoryByVendingMachine(request, h) {
   try {
     await validateVendingMachineId(vendingMachineId, request);
 
-    const snackInventory = await getSnacksByVendingMachine(request, h);
-    const drinkInventory = await getDrinksByVendingMachine(request, h);
+    const inventoryItems = await db('vending_machine_inventories')
+      .select('inventory_id', 'quantity', 'inventory_type')
+      .where('vending_machine_id', vendingMachineId);
 
-    const inventory = {
-      snacks: snackInventory?.source?.data || [],
-      drinks: drinkInventory?.source?.data || [],
-    };
-
-    logger.logRequest({
-      request,
-      message: 'Inventory fetch by vending machine completed!',
-      start: startTime,
-      additionalData: {
+    if (inventoryItems.length === 0) {
+      console.log('No inventory found for vending machine', {
+        method: request.method,
+        path: request.path,
+        duration: `${Date.now() - startTime}ms`,
         vendingMachineId,
-        snackCount: inventory.snacks.length,
-        drinkCount: inventory.drinks.length,
-      },
+        count: 0,
+      });
+    }
+
+    console.log('Inventory by vending machine fetch completed', {
+      method: request.method,
+      path: request.path,
+      duration: `${Date.now() - startTime}ms`,
+      vendingMachineId,
+      count: inventoryItems.length,
     });
 
     return h
       .response({
         status: '200',
-        data: inventory,
+        data: inventoryItems,
       })
       .code(200);
   } catch (error) {
-    logger.logRequest({
-      request,
-      message: 'Failed to fetch inventory by vending machine',
-      error,
-      start: startTime,
-      level: 'error',
-      additionalData: { vendingMachineId },
-    });
+    if (error instanceof AppError) {
+      console.error('Custom error in inventory by vending machine fetch:', error);
+      console.log('Custom error in inventory by vending machine fetch', {
+        method: request.method,
+        path: request.path,
+        duration: `${Date.now() - startTime}ms`,
+        vendingMachineId,
+        error: error.message,
+      });
+      throw error;
+    }
 
+    console.error('Failed to fetch inventory for vending machine:', error);
+    console.log('Failed to fetch inventory for vending machine', {
+      method: request.method,
+      path: request.path,
+      duration: `${Date.now() - startTime}ms`,
+      vendingMachineId,
+      error: error.message,
+    });
     throw createInternalServerError(
-      'Failed to fetch inventory by vending machine',
+      'Failed to fetch inventory for vending machine',
     );
   }
 }

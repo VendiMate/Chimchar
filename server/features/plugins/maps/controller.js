@@ -1,5 +1,4 @@
-import db from '../../../../db/index.js';
-import logger from '../../../../src/utils/logger.js';
+import { db } from '../../../../db/index.js';
 import { FindClosestPoint } from './helper.js';
 export async function getCities(request, h) {
   try {
@@ -13,11 +12,28 @@ export async function getCities(request, h) {
 
 export async function getCoordinates(request, h) {
   try {
-    const coordinates = await db('vending_machines').select('*');
-    return h.response(coordinates).code(200);
+    const coordinates = await db('location_cities').select('*');
+
+    return h
+      .response({
+        status: '200',
+        data: coordinates,
+      })
+      .code(200);
   } catch (error) {
-    console.error(error);
-    return h.response({ message: 'Error getting coordinates' }).code(500);
+    console.error('Error getting coordinates:', error);
+    console.log('Error getting coordinates', {
+      method: request.method,
+      path: request.path,
+      error: error.message,
+    });
+
+    return h
+      .response({
+        status: '500',
+        message: 'Internal server error',
+      })
+      .code(500);
   }
 }
 
@@ -27,7 +43,10 @@ export async function findClosestVendingMachine(request, h) {
   try {
     coordinates = await db('vending_machine_locations').select('*');
   } catch (error) {
-    logger.error('Error getting coordinates', {
+    console.error('Error getting coordinates:', error);
+    console.log('Error getting coordinates', {
+      method: request.method,
+      path: request.path,
       error: error.message,
     });
     return h.response({ message: 'Error getting coordinates' }).code(500);

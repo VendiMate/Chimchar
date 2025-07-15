@@ -1,4 +1,3 @@
-import logger from '../../../../src/utils/logger.js';
 import {
   getInventory,
   decrementInventory,
@@ -34,7 +33,7 @@ export async function dispenseTransaction(request, h) {
           message: 'Insufficient inventory',
           code: 'INSUFFICIENT_INVENTORY',
         };
-        logger.error(logData);
+        console.error(logData);
         return h.response({ error: 'Insufficient inventory' }).code(400);
       }
     }
@@ -46,7 +45,7 @@ export async function dispenseTransaction(request, h) {
       amount,
     );
     logData.message = 'Transaction successful';
-    logger.info(logData);
+    console.info(logData);
     return h.response({ message: 'Transaction successful' }).code(200);
   } catch (error) {
     logData.error = {
@@ -54,7 +53,7 @@ export async function dispenseTransaction(request, h) {
       code: error.code || 'UNKNOWN_ERROR',
       stack: error.stack,
     };
-    logger.error(logData);
+      error(logData);
     return h.response({ error: error.message }).code(400);
   }
 }

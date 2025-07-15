@@ -3,7 +3,10 @@
  * @returns { Promise<void> }
  */
 export async function seed(knex) {
-  // First delete vending machines that reference these cities
+  // First delete vending machine inventories that reference vending machines
+  await knex('vending_machine_inventories').del();
+
+  // Then delete vending machines that reference these cities
   await knex('vending_machines').del();
 
   // Then delete the cities

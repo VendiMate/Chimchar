@@ -9,16 +9,13 @@ const environments = {
     },
     database: {
       host: 'localhost',
-      port: 5430,
+      port: 5421,
       name: 'chimchar-docker',
       user: 'admin',
       password: 'admin',
     },
     redis: {
       url: 'redis://:local@localhost:6379/0',
-    },
-    elasticsearch: {
-      url: 'http://localhost:9200',
     },
   },
   staging: {
@@ -40,9 +37,6 @@ const environments = {
     redis: {
       url: process.env.REDIS_URL,
     },
-    elasticsearch: {
-      url: process.env.ELASTICSEARCH_URL,
-    },
   },
   production: {
     api: {
@@ -58,9 +52,6 @@ const environments = {
     },
     redis: {
       url: process.env.REDIS_URL,
-    },
-    elasticsearch: {
-      url: process.env.ELASTICSEARCH_URL,
     },
   },
 };

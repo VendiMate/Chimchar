@@ -3,7 +3,7 @@
   "scripts": {
     "start": "nodemon --legacy-watch --exitcrash server/index.js",
     "db:migrate": "knex migrate:latest",
-    "db:migrate:dev": "knex migrate:latest --env docker",
+    "db:migrate:dev": "knex migrate:latest --env local",
     "db:migrate:local": "knex migrate:latest --env local",
     "db:migrate:staging": "knex migrate:latest --env staging",
     "db:migrate:prod": "knex migrate:latest --env production",
@@ -11,7 +11,7 @@
     "db:seed:local": "knex seed:run --env local",
     "db:rollback:local": "knex migrate:rollback --env local",
     "db:seed": "knex seed:run",
-    "db:seed:dev": "knex seed:run --env docker",
+    "db:seed:dev": "knex seed:run --env local",
     "db:seed:prod": "knex seed:run --env production",
     "db:rollback": "knex migrate:rollback",
     "format": "prettier --write .",
@@ -24,16 +24,14 @@
     "localdev:start": "docker-compose up --build"
   },
   "dependencies": {
-    "@elastic/elasticsearch": "^8.12.1",
     "@hapi/hapi": "^21.4.0",
     "dotenv": "^16.4.7",
+    "ioredis": "^5.3.2",
     "joi": "^17.13.3",
     "knex": "^3.1.0",
     "nodemon": "^3.1.9",
     "pg": "^8.14.1",
-    "redis": "^4.7.0",
-    "winston": "^3.11.0",
-    "winston-elasticsearch": "^0.19.0"
+    "redis": "^4.7.0"
   },
   "devDependencies": {
     "eslint": "^8.57.0",

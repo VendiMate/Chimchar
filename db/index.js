@@ -1,27 +1,29 @@
-import knex from 'knex';
-import knexfile from '../knexfile.js';
-import config from '../src/config/index.js';
-import dotenv from 'dotenv';
-import logger from '../src/utils/logger.js';
+import knex from "knex";
+import knexConfig from "../knexfile.js";
+import dotenv from "dotenv";
 dotenv.config();
 
-const environment = process.env.NODE_ENV || 'local';
-const dbConfig = knexfile[environment];
+const environment = process.env.NODE_ENV || "local";
+console.log(`Environment: ${environment}`);
 
-// Override database connection with environment-specific config
-if (environment !== 'local') {
-  dbConfig.connection = {
-    host: config.database.host,
-    port: config.database.port,
-    database: config.database.name,
-    user: config.database.user,
-    password: config.database.password,
-    ssl: { rejectUnauthorized: false },
+let config = knexConfig[environment];
+
+// If running inside Docker, use the Docker database connection
+if (process.env.DATABASE_URL) {
+  config.connection = {
+    host: 'db',
+    port: 5432,
+    database: 'chimchar-docker',
+    user: 'admin',
+    password: 'admin',
   };
 }
 
-logger.info(`Environment: ${environment}`);
+config = {
+  ...config,
+  client: "pg",
+};
 
-const db = knex(dbConfig);
+const db = knex(config);
 
-export default db;
+export { db };

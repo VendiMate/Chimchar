@@ -1,5 +1,3 @@
-import logger from '../utils/logger.js';
-
 const requestLogger = {
   name: 'request-logger',
   version: '1.0.0',
@@ -14,7 +12,7 @@ const requestLogger = {
     server.ext('onPreResponse', (request, h) => {
       const duration = Date.now() - request.app.startTime;
 
-      logger.info('API Request', {
+      console.log('API Request', {
         method: request.method,
         path: request.path,
         statusCode: request.response?.statusCode || 500,

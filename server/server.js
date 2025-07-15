@@ -4,7 +4,6 @@ import { plugin as inventoryPlugin } from './features/plugins/inventory/index.js
 import { plugin as transactionPlugin } from './features/plugins/transaction/index.js';
 import { errorHandler } from './error-handler.js';
 import requestLogger from '../src/middleware/logger-handler.js';
-import logger from '../src/utils/logger.js';
 import config from '../src/config/index.js';
 
 const server = Hapi.server({
@@ -45,7 +44,7 @@ const registerRoutes = async (server) => {
     },
     errorHandler,
   ]);
-  logger.info('Routes registered successfully');
+  console.log('Routes registered successfully');
 };
 
 const configureServer = async () => {

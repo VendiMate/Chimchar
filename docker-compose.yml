@@ -3,13 +3,13 @@ version: '3.8'
 services:
   db:
     image: postgres:15
-    container_name: chimchar-db
+    container_name: chimchar-postgres
     environment:
+      POSTGRES_DB: chimchar-docker
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
-      POSTGRES_DB: chimchar-docker
     ports:
-      - 5430:5432
+      - 5421:5432
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -39,7 +39,6 @@ services:
       - '3003:3003'
     environment:
       - NODE_ENV=local
-      - ELASTICSEARCH_URL=http://elasticsearch:9200
       - DATABASE_URL=postgres://admin:admin@db:5432/chimchar-docker
       - REDIS_URL=redis://:local@redis:6379/0
     depends_on:
@@ -47,56 +46,16 @@ services:
         condition: service_healthy
       redis:
         condition: service_started
-      elasticsearch:
-        condition: service_started
-      kibana:
-        condition: service_started
     volumes:
       - .:/app
       - /app/node_modules
     networks:
       - chimchar_network
-      - elastic
-
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.12.1
-    container_name: elasticsearch
-    environment:
-      - discovery.type=single-node
-      - bootstrap.memory_lock=true
-      - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
-      - xpack.security.enabled=false
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    ports:
-      - '9200:9200'
-    volumes:
-      - elasticsearch-data:/usr/share/elasticsearch/data
-    networks:
-      - elastic
-
-  kibana:
-    image: docker.elastic.co/kibana/kibana:8.12.1
-    container_name: kibana
-    ports:
-      - '5601:5601'
-    environment:
-      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
-    depends_on:
-      - elasticsearch
-    networks:
-      - elastic
 
 volumes:
   postgres_data:
   redis_data:
-  elasticsearch-data:
-    driver: local
 
 networks:
   chimchar_network:
-    driver: bridge
-  elastic:
     driver: bridge

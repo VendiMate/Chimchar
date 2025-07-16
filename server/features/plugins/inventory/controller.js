@@ -301,9 +301,27 @@ export async function getInventoryByVendingMachine(request, h) {
   try {
     await validateVendingMachineId(vendingMachineId, request);
 
-    const inventoryItems = await db('vending_machine_inventories')
-      .select('inventory_id', 'quantity', 'inventory_type')
-      .where('vending_machine_id', vendingMachineId);
+    const inventoryItems = await db('vending_machine_inventories as vmi')
+      .leftJoin('snack_inventories as si', function() {
+        this.on('vmi.inventory_id', '=', 'si.id').andOn('vmi.inventory_type', '=', db.raw('?', ['snack']));
+      })
+      .leftJoin('drink_inventories as di', function() {
+        this.on('vmi.inventory_id', '=', 'di.id').andOn('vmi.inventory_type', '=', db.raw('?', ['drink']));
+      })
+      .select(
+        'vmi.id',
+        'vmi.inventory_id',
+        'vmi.inventory_type',
+        'vmi.quantity',
+        'vmi.price',
+        'vmi.row_number',
+        'vmi.column_number',
+        'vmi.status',
+        db.raw('COALESCE(si.name, di.name) as name'),
+        db.raw('COALESCE(si.image_url, di.image_url) as image_url'),
+        db.raw('COALESCE(si.default_price, di.default_price) as default_price')
+      )
+      .where('vmi.vending_machine_id', vendingMachineId);
 
     if (inventoryItems.length === 0) {
       console.log('No inventory found for vending machine', {

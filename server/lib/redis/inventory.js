@@ -4,34 +4,43 @@ import { db } from '../../../db/index.js';
 // Only create Redis connection if REDIS_URL is provided
 let redis = null;
 if (process.env.REDIS_URL) {
-  redis = new Redis(process.env.REDIS_URL, {
-    retryStrategy: (times) => {
-      const delay = Math.min(times * 50, 2000);
-      return delay;
-    },
-    maxRetriesPerRequest: 3,
-  });
-
-  redis.on('error', (err) => {
-    console.error('Redis error:', {
-      error: err.message,
-      code: err.code,
+  try {
+    redis = new Redis(process.env.REDIS_URL, {
+      retryStrategy: (times) => {
+        const delay = Math.min(times * 50, 2000);
+        return delay;
+      },
+      maxRetriesPerRequest: 3,
+      // Add connection timeout to prevent hanging
+      connectTimeout: 5000,
+      commandTimeout: 3000,
+      lazyConnect: true, // Don't connect immediately
     });
-  });
 
-  redis.on('connect', () => {
-    console.log('Redis connected', {
-      host: redis.options.host,
-      port: redis.options.port,
+    redis.on('error', (err) => {
+      console.error('Redis error:', {
+        error: err.message,
+        code: err.code,
+      });
     });
-  });
 
-  redis.on('ready', () => {
-    console.log('Redis ready', {
-      host: redis.options.host,
-      port: redis.options.port,
+    redis.on('connect', () => {
+      console.log('Redis connected', {
+        host: redis.options.host,
+        port: redis.options.port,
+      });
     });
-  });
+
+    redis.on('ready', () => {
+      console.log('Redis ready', {
+        host: redis.options.host,
+        port: redis.options.port,
+      });
+    });
+  } catch (error) {
+    console.error('Failed to initialize Redis connection:', error.message);
+    redis = null;
+  }
 } else {
   console.log('No REDIS_URL provided, Redis will be disabled');
 }

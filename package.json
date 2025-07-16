@@ -2,6 +2,7 @@
   "type": "module",
   "scripts": {
     "start": "nodemon --legacy-watch --exitcrash server/index.js",
+    "build": "echo 'Build completed'",
     "db:migrate": "knex migrate:latest",
     "db:migrate:dev": "knex migrate:latest --env local",
     "db:migrate:local": "knex migrate:latest --env local",

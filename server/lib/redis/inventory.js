@@ -1,37 +1,47 @@
 import Redis from 'ioredis';
 import { db } from '../../../db/index.js';
 
-const redis = new Redis(process.env.REDIS_URL || 'redis://localhost:6379', {
-  retryStrategy: (times) => {
-    const delay = Math.min(times * 50, 2000);
-    return delay;
-  },
-  maxRetriesPerRequest: 3,
-});
-
-redis.on('error', (err) => {
-  console.error('Redis error:', {
-    error: err.message,
-    code: err.code,
+// Only create Redis connection if REDIS_URL is provided
+let redis = null;
+if (process.env.REDIS_URL) {
+  redis = new Redis(process.env.REDIS_URL, {
+    retryStrategy: (times) => {
+      const delay = Math.min(times * 50, 2000);
+      return delay;
+    },
+    maxRetriesPerRequest: 3,
   });
-});
 
-redis.on('connect', () => {
-  console.log('Redis connected', {
-    host: redis.options.host,
-    port: redis.options.port,
+  redis.on('error', (err) => {
+    console.error('Redis error:', {
+      error: err.message,
+      code: err.code,
+    });
   });
-});
 
-redis.on('ready', () => {
-  console.log('Redis ready', {
-    host: redis.options.host,
-    port: redis.options.port,
+  redis.on('connect', () => {
+    console.log('Redis connected', {
+      host: redis.options.host,
+      port: redis.options.port,
+    });
   });
-});
+
+  redis.on('ready', () => {
+    console.log('Redis ready', {
+      host: redis.options.host,
+      port: redis.options.port,
+    });
+  });
+} else {
+  console.log('No REDIS_URL provided, Redis will be disabled');
+}
 
 // Check if Redis is available
 const isRedisAvailable = async () => {
+  if (!redis) {
+    return false;
+  }
+  
   try {
     await redis.ping();
     return true;
@@ -88,6 +98,11 @@ const setInventoryInDatabase = async (vendingMachineId, quantity, inventoryId = 
 };
 
 const connectWithRetry = async (maxRetries = 5) => {
+  if (!redis) {
+    console.log('Redis not configured, skipping connection');
+    return false;
+  }
+  
   for (let i = 0; i < maxRetries; i++) {
     try {
       await redis.ping();

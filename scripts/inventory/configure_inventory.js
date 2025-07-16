@@ -1,6 +1,12 @@
 import Redis from 'ioredis';
 
-const redis = new Redis(process.env.REDIS_URL || 'redis://localhost:6379', {
+// Only run if REDIS_URL is provided
+if (!process.env.REDIS_URL) {
+  console.log('No REDIS_URL provided, skipping inventory configuration');
+  process.exit(0);
+}
+
+const redis = new Redis(process.env.REDIS_URL, {
   retryStrategy: (times) => {
     const delay = Math.min(times * 50, 2000);
     return delay;
@@ -37,7 +43,7 @@ const configureInventory = async () => {
     });
 
     // Configure inventory for vending machine ven_000001
-    const vendingMachineId = 'ven_000001';
+    const vendingMachineId = 'ven_00001';
     const initialQuantity = 10;
 
     await redis.set(`inventory:${vendingMachineId}`, initialQuantity);

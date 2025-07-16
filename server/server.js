@@ -12,7 +12,11 @@ const server = Hapi.server({
   host: '0.0.0.0',
   routes: {
     cors: {
-      origin: config.api.cors,
+      origin: [
+        'http://localhost:3000',
+        'https://vendimate.vercel.app',
+        'pikachu-jade.vercel.app'
+      ],
       headers: ['Accept', 'Authorization', 'Content-Type'],
       additionalHeaders: ['X-Requested-With'],
     },

@@ -2,6 +2,7 @@ import Hapi from '@hapi/hapi';
 import { plugin as mapsPlugin } from './features/plugins/maps/index.js';
 import { plugin as inventoryPlugin } from './features/plugins/inventory/index.js';
 import { plugin as transactionPlugin } from './features/plugins/transaction/index.js';
+import { plugin as healthPlugin } from './features/plugins/health/index.js';
 import { errorHandler } from './error-handler.js';
 import requestLogger from '../src/middleware/logger-handler.js';
 import config from '../src/config/index.js';
@@ -38,6 +39,12 @@ const registerRoutes = async (server) => {
     },
     {
       plugin: transactionPlugin,
+      routes: {
+        prefix: '/v1',
+      },
+    },
+    {
+      plugin: healthPlugin,
       routes: {
         prefix: '/v1',
       },

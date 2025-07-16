@@ -15,8 +15,8 @@ export async function seed(knex) {
       id: 'ven_00001',
       name: 'Vending Machine 1',
       city_id: 'lci_000001',
-      x_coordinate: '0.4',
-      y_coordinate: '0.2',
+      x_coordinate: '33.6405',
+      y_coordinate: '-117.8443',
       z_coordinate: null,
       description: 'Sample'
     },
@@ -24,8 +24,8 @@ export async function seed(knex) {
       id: 'ven_00002',
       name: 'Vending Machine 2',
       city_id: 'lci_000002',
-      x_coordinate: '0.6',
-      y_coordinate: '0.8',
+      x_coordinate: '33.6509',
+      y_coordinate: '-117.7447',
       z_coordinate: null,
       description: 'Another sample vending machine'
     }

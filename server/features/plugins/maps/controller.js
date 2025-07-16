@@ -12,7 +12,7 @@ export async function getCities(request, h) {
 
 export async function getCoordinates(request, h) {
   try {
-    const coordinates = await db('location_cities').select('*');
+    const coordinates = await db('vending_machines').select('*');
 
     return h
       .response({
